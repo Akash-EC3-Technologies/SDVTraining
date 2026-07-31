@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ota-manager-team-<id>
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  tls:
+    - hosts:
+        - ota-lab.local
+  rules:
+    - host: ota-lab.local
+      http:
+        paths:
+          - path: /ota-manager-team-<id>(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ota-manager-team-<id>
+                port:
+                  number: 80

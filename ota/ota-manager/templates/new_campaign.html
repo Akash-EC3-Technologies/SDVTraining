@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Create OTA Campain</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background: #f7f7fb;
+                color: #1f2937;
+            }
+            .wrap {
+                max-width: 960px;
+                margin: 40px auto;
+                padding: 24px;
+            }
+            .card {
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                padding: 24px;
+            }
+            .grid {
+                display: grid;
+                gap: 16px;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            label {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 6px;
+            }
+            input,
+            textarea {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 10px;
+                font-size: 14px;
+            }
+            textarea {
+                min-height: 120px;
+                resize: vertical;
+            }
+            .full {
+                grid-column: 1 / -1;
+            }
+            .btn {
+                background: #2563eb;
+                color: white;
+                border: 0;
+                border-radius: 10px;
+                padding: 12px 18px;
+                font-size: 15px;
+                cursor: pointer;
+            }
+            .hint {
+                font-size: 13px;
+                color: #6b7280;
+            }
+            .top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+            a {
+                color: #2563eb;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="top">
+                <div>
+                    <h1 style="margin: 0 0 6px">Create OTA Campain</h1>
+                    <div class="hint">
+                        Use All or comma-separated values for target generation
+                        and regions.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <form id="campainForm">
+                    <div class="grid">
+                        <div>
+                            <label for="CampainName">Campain Name</label>
+                            <input
+                                name="CampainName"
+                                id="CampainName"
+                                required
+                                placeholder="Winter Release"
+                            />
+                        </div>
+                        <div>
+                            <label for="ReleaseVersion">Release Version</label>
+                            <input
+                                name="ReleaseVersion"
+                                id="ReleaseVersion"
+                                required
+                                placeholder="v1.2.3"
+                            />
+                        </div>
+                        <div>
+                            <label for="TargetGeneration"
+                                >Target Generation</label
+                            >
+                            <input
+                                name="TargetGeneration"
+                                id="TargetGeneration"
+                                value="All"
+                                placeholder="All or Gen1,Gen2"
+                            />
+                        </div>
+                        <div>
+                            <label for="TargetRegions">Target Regions</label>
+                            <input
+                                name="TargetRegions"
+                                id="TargetRegions"
+                                value="All"
+                                placeholder="All or EU,IN"
+                            />
+                        </div>
+                        <div class="full">
+                            <label for="Firmwares"
+                                >Firmware Metadata URLs</label
+                            >
+                            <textarea
+                                name="Firmwares"
+                                id="Firmwares"
+                                required
+                                placeholder="https://example.com/fw1.json, https://example.com/fw2.json"
+                            ></textarea>
+                            <div class="hint">
+                                Comma-separated URLs. They will be sent as a
+                                list.
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 18px">
+                        <button class="btn" type="submit">
+                            Create Campain
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document
+                .getElementById("campainForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const form = e.target;
+                    const payload = {
+                        CampainName: form.CampainName.value.trim(),
+                        ReleaseVersion: form.ReleaseVersion.value.trim(),
+                        TargetGeneration:
+                            form.TargetGeneration.value.trim() || "All",
+                        TargetRegions: form.TargetRegions.value.trim() || "All",
+                        Firmwares: form.Firmwares.value
+                            .split(",")
+                            .map((s) => s.trim())
+                            .filter(Boolean),
+                    };
+
+                    const res = await fetch(
+                        "/ota-manager-team-<id>/api/campain/new",
+                        {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload),
+                        },
+                    );
+
+                    const data = await res.json();
+                    if (!res.ok && res.status !== 207) {
+                        alert(data.error || "Failed to create campain");
+                        return;
+                    }
+                    const id = data.campaign?.CampainId;
+                    if (id) {
+                        window.location.href = `/ota-manager-team-<id>/ui/campain/${id}/status`;
+                    }
+                });
+        </script>
+    </body>
+</html>

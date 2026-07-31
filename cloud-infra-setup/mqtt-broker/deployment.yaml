@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-broker
+  namespace: mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-broker
+  template:
+    metadata:
+      labels:
+        app: mqtt-broker
+    spec:
+      containers:
+        - name: mosquitto
+          image: eclipse-mosquitto:2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8883
+              hostPort: 8883
+              protocol: TCP
+              name: mqtts
+          volumeMounts:
+            - name: config
+              mountPath: /mosquitto/config/mosquitto.conf
+              subPath: mosquitto.conf
+              readOnly: true
+            - name: data
+              mountPath: /mosquitto/data
+            - name: certs
+              mountPath: /mosquitto/certs
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: mqtt-broker-config
+        - name: certs
+          secret:
+            secretName: mqtt-broker-certs
+        - name: data
+          persistentVolumeClaim:
+            claimName: mqtt-broker-data

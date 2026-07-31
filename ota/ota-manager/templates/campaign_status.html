@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Campain Status</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background: #f7f7fb;
+                color: #1f2937;
+            }
+            .wrap {
+                max-width: 1100px;
+                margin: 40px auto;
+                padding: 24px;
+            }
+            .card {
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                padding: 24px;
+                margin-bottom: 20px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th,
+            td {
+                text-align: left;
+                padding: 12px;
+                border-bottom: 1px solid #e5e7eb;
+            }
+            th {
+                background: #f9fafb;
+            }
+            .badge {
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 999px;
+                background: #eef2ff;
+            }
+            .muted {
+                color: #6b7280;
+            }
+            a {
+                color: #2563eb;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div
+                style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 16px;
+                    margin-bottom: 20px;
+                "
+            >
+                <div>
+                    <h1 style="margin: 0 0 6px">Campain Status</h1>
+                    <div class="muted">
+                        Campaign ID: {{ campaign.CampainId if campaign else
+                        campain_id }}
+                    </div>
+                </div>
+                <div>
+                    <a href="/ota-manager-team-<id>/ui/campain/new"
+                        >Create another campain</a
+                    >
+                </div>
+            </div>
+
+            {% if not campaign %}
+            <div class="card">Campain not found.</div>
+            {% else %}
+            <div class="card">
+                <h2 style="margin-top: 0">{{ campaign.CampainName }}</h2>
+                <p>
+                    <strong>Release Version:</strong> {{ campaign.ReleaseVersion
+                    }}
+                </p>
+                <p>
+                    <strong>Target Generation:</strong> {{
+                    campaign.TargetGeneration }}
+                </p>
+                <p>
+                    <strong>Target Region:</strong> {{ campaign.TargetRegion }}
+                </p>
+                <p><strong>Created At:</strong> {{ campaign.CreatedAt }}</p>
+                <p><strong>Firmware URLs:</strong></p>
+                <ul>
+                    {% for fw in campaign.FirmwareMetadataUrls %}
+                    <li>{{ fw }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-top: 0">Vehicle Update Status</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>VehicleName</th>
+                            <th>VehicleId</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in campaign.Status %}
+                        <tr>
+                            <td>{{ row.VehicleName }}</td>
+                            <td>{{ row.VehicleId }}</td>
+                            <td><span class="badge">{{ row.Status }}</span></td>
+                            <td>{{ row.LastUpdatedAt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </body>
+</html>

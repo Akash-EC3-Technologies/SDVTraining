@@ -1,0 +1,48 @@
+{
+  "vehicles": [
+    {
+      "VehicleId": "V1001",
+      "Name": "Vehicle Alpha",
+      "Generation": "Gen1",
+      "Region": "EU",
+      "Firmwares": [
+        {
+          "ECU_Id": "ECU-1",
+          "ECU_Name": "VCU",
+          "Version": "1.0.0"
+        },
+        {
+          "ECU_Id": "ECU-2",
+          "ECU_Name": "TCU",
+          "Version": "1.0.0"
+        }
+      ]
+    },
+    {
+      "VehicleId": "V1002",
+      "Name": "Vehicle Beta",
+      "Generation": "Gen1",
+      "Region": "IN",
+      "Firmwares": [
+        {
+          "ECU_Id": "ECU-1",
+          "ECU_Name": "VCU",
+          "Version": "1.0.1"
+        }
+      ]
+    },
+    {
+      "VehicleId": "V2001",
+      "Name": "Vehicle Gamma",
+      "Generation": "Gen2",
+      "Region": "ALL",
+      "Firmwares": [
+        {
+          "ECU_Id": "ECU-3",
+          "ECU_Name": "BCM",
+          "Version": "2.0.0"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ota-manager-team-<id>
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ota-manager-team-<id>
+  template:
+    metadata:
+      labels:
+        app: ota-manager-team-<id>
+    spec:
+      containers:
+        - name: app
+          image: registry.ota-lab.local/ota-manager:team-<id>-1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: HTTP_PORT
+              value: "8000"
+            - name: MQTT_HOST
+              value: "mqtt-broker.ota-lab.local"
+            - name: MQTT_PORT
+              value: "8883"
+            - name: CERTS_PATH
+              value: "/app/certs"
+            - name: DATA_DIR
+              value: "/app"

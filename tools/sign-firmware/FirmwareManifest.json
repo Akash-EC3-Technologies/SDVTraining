@@ -1,0 +1,14 @@
+{
+  "ecuId": "VCU",
+  "version": "1.2.3",
+  "created": "2026-08-04T09:43:40Z",
+  "size": 909364,
+  "hashAlgorithm": "SHA-256",
+  "hash": "94d2fc60b0c69fa49641ef235a91b664b8a216ef5e4d833372280483329ec3ed",
+  "downloadUrl": "https://file-server.ota-lab.local:9000/downloads/firmwares/gpio_blink.elf",
+  "signature": {
+    "algorithm": "ECDSA-P256-SHA256",
+    "keyId": "signing-key-1",
+    "value": "MEUCIH0oKzGlFx7/yh63ePy9gVkyuOTdLC5xKG8PdTiZeWTCAiEA3xvUPVdH1moZU8vF/1XpYGYAj7+IfGFha/oTICWfzxs="
+  }
+}
